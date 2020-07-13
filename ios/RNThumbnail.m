@@ -24,10 +24,13 @@ RCT_EXPORT_METHOD(get:(NSString *)filepath resolve:(RCTPromiseResolveBlock)resol
         AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
         generator.appliesPreferredTrackTransform = YES;
         
-        NSError *err = NULL;
-        CMTime time = CMTimeMake(1, 60);
+        CMTime duration = [asset duration];
+        CMTime snapshot = CMTimeMake(duration.value / 2, duration.timescale);
         
-        CGImageRef imgRef = [generator copyCGImageAtTime:time actualTime:NULL error:&err];
+        NSError *err = NULL;
+        //CMTime time = CMTimeMake(1, 60);
+        
+        CGImageRef imgRef = [generator copyCGImageAtTime:snapshot actualTime:NULL error:&err];
         UIImage *thumbnail = [UIImage imageWithCGImage:imgRef];
         // save to temp directory
         NSString* tempDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
